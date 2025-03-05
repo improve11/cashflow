@@ -1,0 +1,8 @@
+{% if categories %}
+    <option value="">---------</option>
+    {% for category in categories %}
+    <option value="{{ category.pk }}">{{ category.name }}</option>
+    {% endfor %}
+{% else %}
+    <option value="">Нет доступных категорий</option>
+{% endif %}

@@ -1,0 +1,69 @@
+{% extends 'cashflow/base.html' %}
+
+{% block content %}
+<h1>Управление справочниками</h1>
+
+<!-- Статусы -->
+<div class="mb-4">
+    <h3>Статусы <a href="{% url 'status_create' %}" class="btn btn-sm btn-success">➕ Добавить</a></h3>
+    <ul class="list-group mt-2">
+        {% for status in dictionaries.statuses %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ status.name }}
+            <div>
+                <a href="{% url 'status_edit' status.pk %}" class="btn btn-sm btn-warning">✏️</a>
+                <a href="{% url 'status_delete' status.pk %}" class="btn btn-sm btn-danger">🗑️</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Типы -->
+<div class="mb-4">
+    <h3>Типы <a href="{% url 'type_create' %}" class="btn btn-sm btn-success">➕ Добавить</a></h3>
+    <ul class="list-group mt-2">
+        {% for type in dictionaries.types %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ type.name }}
+            <div>
+                <a href="{% url 'type_edit' type.pk %}" class="btn btn-sm btn-warning">✏️</a>
+                <a href="{% url 'type_delete' type.pk %}" class="btn btn-sm btn-danger">🗑️</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Категории -->
+<div class="mb-4">
+    <h3>Категории <a href="{% url 'category_create' %}" class="btn btn-sm btn-success">➕ Добавить</a></h3>
+    <ul class="list-group mt-2">
+        {% for category in dictionaries.categories %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ category.name }} ({{ category.type }})
+            <div>
+                <a href="{% url 'category_edit' category.pk %}" class="btn btn-sm btn-warning">✏️</a>
+                <a href="{% url 'category_delete' category.pk %}" class="btn btn-sm btn-danger">🗑️</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Подкатегории -->
+<div class="mb-4">
+    <h3>Подкатегории <a href="{% url 'subcategory_create' %}" class="btn btn-sm btn-success">➕ Добавить</a></h3>
+    <ul class="list-group mt-2">
+        {% for subcategory in dictionaries.subcategories %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ subcategory.name }} ({{ subcategory.category }})
+            <div>
+                <a href="{% url 'subcategory_edit' subcategory.pk %}" class="btn btn-sm btn-warning">✏️</a>
+                <a href="{% url 'subcategory_delete' subcategory.pk %}" class="btn btn-sm btn-danger">🗑️</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,1 +1,86 @@
+{% extends 'cashflow/base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 
+{% block content %}
+<h1>Движение денежных средств</h1>
+
+<div class="mb-4">
+    <form method="get" class="form-inline">
+        <div class="row g-3">
+            {{ filter.form|crispy }}
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Фильтровать</button>
+                <a href="{% url 'export' %}?{{ request.GET.urlencode }}" class="btn btn-success export-btn">Экспорт в CSV</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th>Тип</th>
+            <th>Категория</th>
+            <th>Подкатегория</th>
+            <th>Сумма</th>
+            <th>Комментарий</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.date|date:"d.m.Y H:i" }}</td>
+            <td>{{ transaction.status }}</td>
+            <td>{{ transaction.type }}</td>
+            <td>{{ transaction.category }}</td>
+            <td>{{ transaction.subcategory }}</td>
+            <td>{{ transaction.amount }} ₽</td>
+            <td>{{ transaction.comment|default:"—" }}</td>
+            <td>
+                <a href="{% url 'edit' transaction.pk %}" class="btn btn-sm btn-warning">✏️</a>
+                <a href="{% url 'delete' transaction.pk %}" class="btn btn-sm btn-danger">🗑️</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="8" class="text-center">Нет данных</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+<div class="mt-4">
+    <a href="{% url 'create' %}" class="btn btn-success">➕ Создать запись</a>
+    <a href="{% url 'manage' %}" class="btn btn-outline-secondary">⚙️ Управление справочниками</a>
+</div>
+{% endblock %}

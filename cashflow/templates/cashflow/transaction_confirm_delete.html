@@ -1,0 +1,11 @@
+{% extends 'cashflow/base.html' %}
+
+{% block content %}
+<h2>Удаление транзакции</h2>
+<p>Вы уверены что хотите удалить транзакцию от {{ object.date|date:"d.m.Y" }}?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Удалить</button>
+    <a href="{% url 'index' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}
